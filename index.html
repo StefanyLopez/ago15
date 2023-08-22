@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformaciones</title>
+    <script>
+        function crearTransformacionMatriz(ValorTransformacion){
+            const matriz = [
+                [1, 0, 0, ValorTransformacion[0]],
+                [0, 1, 0, ValorTransformacion[1]],
+                [0, 0, 1, ValorTransformacion[2]],
+                [0, 0, 0, 1]
+            ];
+            return matriz;
+        }
+
+        function applyTransformacion(matriz, vector){
+            vector.push(1);
+            const result = [0, 0, 0, 0];
+            for (let i = 0; i < 4; i++){
+                for (let j = 0; j < 4; j++){
+                    result[i] += vector[j] * matriz[i][j];
+                } 
+            }
+            vector.pop();
+            return result.slice(0, 3);
+        }
+
+        function byId(sid){
+            return document.getElementById(sid).value;
+        }
+
+        function strarr2num(strarr, lim){
+            arrs = strarr.split(lim);
+            arrn = [];
+            arrs.forEach((elem) => {
+                arrn.push(Number(elem));
+            });
+            return arrn;
+        }
+
+       
+        function escalaMatriz(escalar){
+            return [
+                [escalar[0], 0, 0, 0],
+                [0, escalar[1], 0, 0],
+                [0, 0, escalar[2], 0],
+                [0, 0, 0, 1]
+            ];
+        }
+
+        function rotacionXMatriz(angulo){
+            const radian = (angulo * Math.PI) / 180;
+            return [
+                [1, 0, 0, 0],
+                [0, Math.cos(radian), -Math.sin(radian), 0],
+                [0, Math.sin(radian), Math.cos(radian), 0],
+                [0, 0, 0, 1]
+            ];
+        }
+
+        function rotacionYMatriz(angulo){
+            const radian = (angulo * Math.PI) / 180;
+            return [
+                [Math.cos(radian), 0, Math.sin(radian), 0],
+                [0, 1, 0, 0],
+                [-Math.sin(radian), 0, Math.cos(radian), 0],
+                [0, 0, 0, 1]
+            ];
+        }
+
+        function rotacionZMatriz(angulo){
+            const radian = (angulo * Math.PI) / 180;
+            return [
+                [Math.cos(radian), -Math.sin(radian), 0, 0],
+                [Math.sin(radian), Math.cos(radian), 0, 0],
+                [0, 0, 1, 0],
+                [0, 0, 0, 1]
+            ];
+        } 
+        
+        function traslacion(){
+            var aos = document.getElementById('vo').value;
+            aon = strarr2num(aos, ','); 
+            atn = strarr2num(byId('vt'), ',');
+            document.getElementById('vr').value = applyTransformacion(crearTransformacionMatriz(atn), aon).join(', ');
+        }
+
+        function escala(){
+            var aos = document.getElementById('vo').value;
+            aon = strarr2num(aos, ','); 
+            escalar = strarr2num(byId('ve'), ',');
+            document.getElementById('vr').value = applyTransformacion(escalaMatriz(escalar), aon).join(', ');
+        }
+
+        function rotacionX(){
+            var aos = document.getElementById('vo').value;
+            aon = strarr2num(aos, ','); 
+            angulo = parseFloat(byId('gr'));
+            document.getElementById('vr').value = applyTransformacion(rotacionXMatriz(angulo), aon).join(', ');
+        }
+
+        function rotacionY(){
+            var aos = document.getElementById('vo').value;
+            aon = strarr2num(aos, ','); 
+            angulo = parseFloat(byId('gr'));
+            document.getElementById('vr').value = applyTransformacion(rotacionYMatriz(angulo), aon).join(', ');
+        }
+
+        function rotacionZ(){
+            var aos = document.getElementById('vo').value;
+            aon = strarr2num(aos, ','); 
+            angulo = parseFloat(byId('gr'));
+            document.getElementById('vr').value = applyTransformacion(rotacionZMatriz(angulo), aon).join(', ');
+        }
+
+    </script>
+</head>
+<body>
+    <p>Vector original 
+        <input id="vo" size="10"/></p> <!--Vector original-->
+    <p>Vector traslación
+        <input id="vt" size="10"/></p>
+    <p>Vector escala
+        <input id="ve" size="10"/></p>
+    <p>Grados a rotar 
+        <input id="gr" size="10"/></p>
+    <p>Vector resultante
+        <input id="vr" size="10"/></p>
+    <button onclick="traslacion()">Realizar traslación</button>
+    <button onclick="escala()">Realizar escalado</button>
+    <button onclick="rotacionX()">Realizar rotación en x</button>
+    <button onclick="rotacionY()">Realizar rotación en y</button>
+    <button onclick="rotacionZ()">Realizar rotación en z</button>
+</body>
+</html>
